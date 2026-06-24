@@ -8,3 +8,5 @@ entity Products {
       price       : Decimal(9, 2);
       stock       : Integer;
 }
+
+// new comments
