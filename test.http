@@ -1,0 +1,50 @@
+### ---------------------------------------------------------------------------
+### Local Testing for CatalogService (Products)
+### Requires VS Code "REST Client" or BAS built-in HTTP client
+### ---------------------------------------------------------------------------
+
+@server = http://localhost:4004
+# 'alice' is a default mock user provided by the CAP framework for local testing
+@auth = Basic alice:
+
+### 1. Get all Products (Should return empty array initially)
+GET {{server}}/odata/v4/catalog/Products
+Authorization: {{auth}}
+
+### 2. Create a new Product
+# @name createProduct
+POST {{server}}/odata/v4/catalog/Products
+Authorization: {{auth}}
+Content-Type: application/json
+
+{
+  "name": "The Hitchhiker's Guide to the Galaxy",
+  "description": "A comedic science fiction franchise created by Douglas Adams.",
+  "price": 42.00,
+  "stock": 100
+}
+
+### 3. Read the newly created Product
+# Grabs the ID automatically from the previous POST request
+@productId = {{createProduct.response.body.ID}}
+
+GET {{server}}/odata/v4/catalog/Products({{productId}})
+Authorization: {{auth}}
+
+### 4. Update the Product's stock (e.g., someone bought a copy)
+PATCH {{server}}/odata/v4/catalog/Products({{productId}})
+Authorization: {{auth}}
+Content-Type: application/json
+
+{
+  "stock": 99
+}
+
+### 5. Delete the Product
+DELETE {{server}}/odata/v4/catalog/Products({{productId}})
+Authorization: {{auth}}
+
+### ---------------------------------------------------------------------------
+### 6. Test Unauthorized Access (Should return 401 Unauthorized)
+### ---------------------------------------------------------------------------
+GET {{server}}/odata/v4/catalog/Products
