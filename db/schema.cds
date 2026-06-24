@@ -1,6 +1,6 @@
 namespace my.simplecrud;
 
-// A simple table to hold Product data jhfgjgg
+// A simple table to hold Product data jhfgjgg i have created
 entity Products {
   key ID          : UUID;
       name        : String(100);
